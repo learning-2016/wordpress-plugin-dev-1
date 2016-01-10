@@ -116,7 +116,46 @@ class popular_posts extends WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
 		}
-		echo __( 'Hello, World!', 'text_domain' );
+
+		/**
+		 * src: tutorial - https://www.youtube.com/watch?v=mEI2ZVQ7WrI&feature=iv&src_vid=-WH_8EdyYAI&annotation_id=annotation_3018301059
+		 * src: class reference - https://codex.wordpress.org/Class_Reference/
+		 * src: class wp query - https://codex.wordpress.org/Class_Reference/WP_Query
+		 */
+
+ 		// Query goes here
+		$query_args = array(
+			'post_type' => 'post',
+		 	'post_per_page' => 5,
+			'meta_key' => 'views',
+		 	'orderby' => 'meta_value_num',
+		    'order' => 'DESC',
+		    'ignore_sticky_posts' => true
+		);
+
+		// The Query
+		$the_query = new WP_Query( $query_args );
+
+		// The Loop
+		if ( $the_query->have_posts() ) {
+			echo '<ul>';
+			while ( $the_query->have_posts() ) {
+				$the_query->the_post();
+				echo '<li>';
+					echo '<a href="' . get_the_permalink() . '" rel="bookmark">';
+					echo get_the_title();
+					echo ' (' . get_post_meta( get_the_ID(), 'views', true ) . ') ';
+					echo '</a>';
+				echo '</li>';
+			}
+			echo '</ul>';
+		} else {
+			// no posts found
+		}
+
+		/* Restore original Post Data */
+		wp_reset_postdata();
+
 		echo $args['after_widget'];
 	}
 
