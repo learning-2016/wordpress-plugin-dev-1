@@ -37,10 +37,10 @@ function my_popular_post_views($postID) {
 */
 function my_count_popular_posts($post_id) {
 	// Check that this is a single post and that the user is a visitor
-	if( !is_single() ) return;
-	if( !is_user_logged_in() ) {
+	if ( !is_single() ) return;
+	if ( !is_user_logged_in() ) {
 		// Get the post ID
-		if( empty( $post_id ) ) {
+		if ( empty( $post_id ) ) {
 			global $post;
 			$post_id = $post->ID;
 		}
@@ -51,3 +51,32 @@ function my_count_popular_posts($post_id) {
  
 add_action( 'wp_head', 'my_count_popular_posts');
 
+/**
+* Add popular post function data to all Posts table
+* src: https://www.youtube.com/watch?v=_JPoeOvgsQM&feature=iv&src_vid=7v6IbmhYC8Y&annotation_id=annotation_4214322217
+*/
+
+/**
+ * @param $defaults
+ * @return mixed
+ * This will add the row name in the admin post page
+ */
+function my_add_views_column($defaults) {
+	$defaults['post_views'] = 'View Count';
+	return $defaults;
+}
+
+add_filter( 'manage_posts_columns', 'my_add_views_column' );
+
+/**
+ * @param $column_name
+ * This will execute the function that to get the total views of each post and in the "View Count" added row name
+ * in the admin post
+ */
+function my_display_views($column_name) {
+	if ( $column_name === 'post_views' ) {
+		echo (int) get_post_meta( get_the_ID(), 'views', true );
+	}
+}
+
+add_action( 'manage_posts_custom_column', 'my_display_views', 5, 2);
