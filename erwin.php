@@ -82,7 +82,10 @@ function my_display_views($column_name) {
 add_action( 'manage_posts_custom_column', 'my_display_views', 5, 2);
 
 
-
+/**
+* src: tutorial - https://www.youtube.com/watch?v=-WH_8EdyYAI&feature=iv&src_vid=_JPoeOvgsQM&annotation_id=annotation_3142444407
+* src1: code - https://codex.wordpress.org/Widgets_API#Example
+*/
 
 /**
  * Adds Popular Posts widget.
